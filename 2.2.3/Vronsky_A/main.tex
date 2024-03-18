@@ -1,0 +1,272 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[a4paper,top=1.3cm,bottom=2cm,left=1.5cm,right=1.5cm,marginparwidth=0.75cm]{geometry}
+%%% Работа с русским языком
+\usepackage{cmap}					% поиск в PDF
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{physics}
+\usepackage{multirow}
+\usepackage{longtable}
+
+%%% Нормальное размещение таблиц (писать [H] в окружении таблицы)
+\usepackage{float}
+% \restylefloat{table}
+
+\usepackage{graphicx}
+\graphicspath{ {./figures}{./processor_output}}
+
+\usepackage{wrapfig}
+\usepackage{tabularx}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+
+%% Шрифты
+\usepackage{euscript}	 % Шрифт Евклид
+\usepackage{mathrsfs} % Красивый матшрифт
+
+%% Свои команды
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\date{\today}
+
+\usepackage{textcomp}
+\usepackage{gensymb}
+
+\usepackage{indentfirst} % Русская традиция первого отступа
+\usepackage[inline]{enumitem} % работа со списками
+
+%% Импорт csv таблиц
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{pgf}
+\usepackage{pgfplotstable}
+\pgfplotstableset{col sep=comma, search path=./processor_output}
+\pgfkeys{/pgf/number format/1000 sep={}}
+\newcolumntype{g}{>{\columncolor[gray]{.8}}c}
+
+% проверяет наличие аргумента в подстроке
+\usepackage{xstring}
+\newcommand\ifin[2]{\IfSubStr{,#2,}{,#1,}}
+
+\newcommand*{\nth}[2]{%
+  \foreach \x [count=\k] in #1{%
+        \ifnum\k=#2{%
+          \x
+        }\fi%
+    }
+}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		{\large МОСКОВСКИЙ ФИЗИКО-ТЕХНИЧЕСКИЙ ИНСТИТУТ (НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ)}
+	\end{center}
+	\begin{center}
+		{\large Физтех-школа прикладной математики и информатики}
+	\end{center}
+
+
+	\vspace{4.5cm}
+	{\huge
+		\begin{center}
+			{\bf Отчёт о выполнении лабораторной работы 2.2.3}\\
+      Определение теплопроводности газов при атмосферном давлении
+		\end{center}
+	}
+	\vspace{2cm}
+	\begin{flushright}
+		{\LARGE Автор:\\ Вронский Александр Сергеевич \\
+			\vspace{0.2cm}
+			Б05-226}
+	\end{flushright}
+	\vspace{8cm}
+	\begin{center}
+		Долгопрудный\\
+		\today
+	\end{center}
+\end{titlepage}
+
+\textbf{Цель работы:} измерить коэффициент теплопроводности воздуха при атмосферном давлении в зависимости от температуры.
+
+\textbf{В работе используются:} цилиндрическая колба с натянутой по оси нитью; термостат; вольтметр и амперметр; эталонное сопротивление; источник постоянного напряжения; магазин сопротивлений.
+
+\section{Теоретические сведения}
+
+  Основной характеристикой теплопроводности служит коэффициент $\varkappa$, являющийся коэффициентом пропорциональности между плотностью потока тепла $q$ и градиентом температуры $dT/dr$ в направлении распространения этого потока
+  \begin{equation}
+    q = -\varkappa \frac{dT}{dr}.
+  \end{equation}
+
+  В цилиндрически симметричной установке, в которой тепловой поток направлен к стенкам цилиндра от нити, полный поток тепла $Q = qS$ через цилиндрическую поверхность радиуса $r$ в стационарном состоянии должен оставаться постоянным и не зависеть от $r$. Тогда
+  \begin{equation}
+    Q = -2\pi rL\varkappa \frac{dT}{dr} = const,
+  \end{equation}
+  откуда получаем формулу:
+  \begin{equation}
+    \label{eq:tempdiff}
+    T_r - T_R = \frac{Q}{2\pi L\varkappa} \ln \frac{R}{r}.
+  \end{equation}
+  Здесь $r$ и $T_r$ -- радиус и температура нити, $R$ и $T_R$ -- радиус и температура цилиндра.
+
+\section{Экспериментальная установка}
+
+  \begin{wrapfigure}{r}{0.4\textwidth}
+    \begin{center}
+      \includegraphics[width = 0.3\textwidth]{apparatus.png}
+    \end{center}
+    \vspace*{-5mm}
+    \caption{Схема установки}
+    \label{fig:apparatus}
+  \end{wrapfigure}
+  Схема установки приведена на рис. \ref{fig:apparatus}. На оси полой цилиндрической трубки с внутренним диаметром $2r_0$ см размещена металлическая нить диаметром $2r_1$ и длиной $L$. Полость трубки заполнена воздухом (полость через небольшое отверстие сообщается с атмосферой). Стенки трубки помещены в кожух, через которых пропускается вода из термостата, так что их температура $t_0$ поддерживается постоянной. Для предотвращения конвекции трубка расположена вертикально.
+
+  Металлическая нить служит как источником тепла, так и датчиком температуры (термометром сопротивления). По пропускаемому через нить постоянному току $I$ и напряжению $U$ на ней вычисляется мощность нагрева по закону Джоуля–Ленца: $Q = UI$, и сопротивление нити по закону Ома: $R = \frac{U}{I}$.
+
+  Сопротивление нити является функцией её температуры $R(t)$.
+  Эта зависимость может быть измерена с помощью термостата по экстраполяции мощности нагрева к нулю $Q \rightarrow 0$, когда температура нити и стенок совпадают $t_1 \approx t_0$. Альтернативно, если материал нити известен, зависимость его удельного сопротивления от температуры может найдена по справочным данным.
+
+  \begin{wrapfigure}{r}{0.4\textwidth}
+    \begin{center}
+      \includegraphics[width = 0.4\textwidth]{curcuit.png}
+    \end{center}
+    \vspace*{-5mm}
+    \caption{Электрическая схема установки}
+    \label{fig:curcuit}
+  \end{wrapfigure}
+
+  В установке для измерения напряжения и тока используется два мультиметра, работающие в режимах вольтметра и амперметра соответственно (рис. \ref{fig:curcuit}). Подключение к нити $R_н$ осуществляется по четырёхпроводной схеме. По двум проводам (токовая пара $I_{+}$ и $I_{-}$) через сопротивление пропускается измерительный ток, а два других (потенциальная пара $U_{+}$ и $U_{-}$) используются для параллельного подключения вольтметра. Сопротивление $R_э$ используется в качестве балластного для предотвращения перегорания нити. Заметим, что при такой схеме внутреннее сопротивление приборов и сопротивление подводящих проводов практически не влияет на измерения: сопротивление амперметра не влияет на результат вовсе, а сопротивление вольтметра составляет обычно $1–100$ МОм, что при $R_н \sim 10$ Ом вносит относительную ошибку не более $10^{-5}$.
+
+\section{Ход работы}
+
+  При фиксированной температуре будем уменьшать сопротивление с помощью магазина сопротивлений. После установления стационарного состояния, запишем показания вольтметра и амперметра, а также вычислим мощность нагрева и сопротивление нити. Результаты измерений для температур в диапазоне $20-70$ \textcelsius{} представлены в таблице \ref{tbl:mnts}. Также зависимости $R(Q)$ приведены на рис. \ref{fig:pow_res}.
+
+  \begin{table}[!htb]
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \input{processor_output/table_temp0.tex}
+
+    \vspace*{5mm}
+    \input{processor_output/table_temp2.tex}
+  \end{minipage}
+  \hspace{5mm}
+  \begin{minipage}{0.5\textwidth}
+    \centering
+    \input{processor_output/table_temp1.tex}
+
+    \vspace*{5mm}
+    \input{processor_output/table_temp3.tex}
+  \end{minipage}
+
+  \end{table}
+
+  \begin{table}[ht!]
+    \centering
+    \input{processor_output/table_temp4.tex}
+    \caption{Измерения при фиксированных температурах}
+    \label{tbl:mnts}
+  \end{table}
+
+  Погрешности вольтметра и амперметра составляли порядка $0.5$ мВ и $0.1$ мА соответственно. Прямым расчетом можно установить, что погрешность сопротивления и мощности нагрева составили порядка $30$ мОм и $0.2$ мВт соответственно.
+
+
+  \begin{figure}[!htb]
+    \begin{minipage}{0.5\textwidth}
+      \centering
+      \input{processor_output/pow_res_temp0.pgf}
+      \vspace*{5mm}
+      \input{processor_output/pow_res_temp2.pgf}
+    \end{minipage}
+    % \hspace{5mm}
+    \begin{minipage}{0.5\textwidth}
+      \centering
+      \input{processor_output/pow_res_temp1.pgf}
+      \vspace*{5mm}
+      \input{processor_output/pow_res_temp3.pgf}
+    \end{minipage}
+
+  \end{figure}
+
+  \begin{figure}[!htb]
+    % \ContinuedFloat
+    \centering
+    \input{processor_output/pow_res_temp4.pgf}
+    \caption{Зависимость сопротивления нити от мощности нагрева}
+    \label{fig:pow_res}
+  \end{figure}
+
+  Предварительно выкинув выбросы, воспользуемся моделью линейной регрессии и моделированием нормального распределения измерений, чтобы аппроксимировать значения $R_0 := R|_{Q = 0}$ для каждой температуры. Результаты вычислений представлены в таблице \ref{tbl:pow_res}, а также на рис. \ref{fig:temp_res}.
+
+  \begin{table}[!htb]
+    \centering
+    \input{processor_output/table_res_temp.tex}
+    \caption{Измерения зависимости сопротивления от температуры}
+    \label{tbl:pow_res}
+  \end{table}
+
+  \begin{figure}[!htb]
+    \centering
+    \input{processor_output/temp_res.pgf}
+    \caption{Зависимость сопротивления от температуры}
+    \label{fig:temp_res}
+  \end{figure}
+
+  Аппроксимируем величины $dR/dT$, $R|_{T = 0}$, получая значения $0.0704 \pm 0.0022$ Ом/К и $18.779 \pm 0.035$ Ом соответственно. Через них находим температурный коэффициент сопротивления материала нити (платина) $ \alpha = \frac{1}{R|_{T = 0}} \frac{dR}{dT} = 3.75 \cdot 10^{-3} \pm 0.048 \cdot 10^{-3}$ $К^{-1}$, табличное значение составляет $ 3.9 \cdot 10^{-3} $ $К^{-1}$.
+
+  Принимая $r_0 = 5$ мм, $r_1 = 0.25$ мм и $L = 400$ мм, вычислим коэффициент теплопроводности для каждого значения температуры, используя формулу:
+  \begin{equation}
+    \varkappa = \frac{dQ}{dR} \frac{dR}{dT} \frac{1}{2 \pi L} \ln \frac{r_0}{r_1},
+  \end{equation}
+  выведенную из \eqref{eq:tempdiff}. Результаты вычислений, а также табличные значения $\varkappa_{ист}$ приведены в таблице \ref{tbl:chi}.
+
+  \begin{table}[!htb]
+    \centering
+    \input{processor_output/table_chi.tex}
+    \caption{Значения коэффициента теплопроводности от температуры}
+    \label{tbl:chi}
+  \end{table}
+
+  Исходя из предположения, что $\varkappa = A T^\beta$, линейно аппроксимируем зависимость $\ln \varkappa (\ln T)$ (где $T$ в градусах Кельвина), чтобы найти $\beta$. Соответствующий график представлен на рис. \ref{fig:ln_chi}. Получаем $\beta = 0.813 \pm 0.517$, что весьма близко к значению, расчитанному по табличным $\varkappa$, а именно $\beta_{ист} = 0.868$. График $ \varkappa (T)$ с аппроксимирующей функцией представлен на рис. \ref{fig:chi}.
+
+  \begin{figure}[!htb]
+    \centering
+    \input{processor_output/ln_chi.pgf}
+    \caption{Зависимость коэффициента теплопроводности от температуры в двойном логарифмическом масштабе}
+    \label{fig:ln_chi}
+  \end{figure}
+
+  \begin{figure}[!htb]
+    \centering
+    \input{processor_output/chi.pgf}
+    \caption{Зависимость коэффициента теплопроводности от температуры и полиномиальные аппроксимирующие}
+    \label{fig:chi}
+  \end{figure}
+
+\section{Вывод}
+
+  Были вычислены коэффициенты температурного сопротивления материала нити $\alpha$ и теплопроводности $\varkappa$, а также степенного коэффициента теплопроводности $\beta$. Погрешность вычисления $\beta$ неудовлетворительная -- порядка $63\%$, в силу неудовлетворительной погрешности измерений, в первую очередь, амперметра, а также вольтметра. Также истинное значение $\beta_{ист}$ отличается от теоретического $\beta_{теор} = 0.5$ на $74\%$.
+
+
+\end{document}
