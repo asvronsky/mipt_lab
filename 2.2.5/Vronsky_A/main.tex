@@ -1,0 +1,123 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[a4paper,top=1.3cm,bottom=2cm,left=1.5cm,right=1.5cm,marginparwidth=0.75cm]{geometry}
+%%% Работа с русским языком
+\usepackage{cmap}					% поиск в PDF
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{physics}
+\usepackage{multirow}
+\usepackage{longtable}
+\usepackage{physics}
+\usepackage{xfrac}
+
+%%% Нормальное размещение таблиц (писать [H] в окружении таблицы)
+\usepackage{float}
+% \restylefloat{table}
+
+\usepackage{graphicx}
+\graphicspath{ {./figures}{./processor_output}}
+
+\usepackage{wrapfig}
+\usepackage{tabularx}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.8}
+\def\mathdefault#1{#1}
+\everymath=\expandafter{\the\everymath\displaystyle}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsmath,amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+
+%% Шрифты
+\usepackage{euscript}	 % Шрифт Евклид
+\usepackage{mathrsfs} % Красивый матшрифт
+
+%% Свои команды
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+	{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\date{\today}
+
+\usepackage{textcomp}
+\usepackage{gensymb}
+
+\usepackage{indentfirst} % Русская традиция первого отступа
+\usepackage[inline]{enumitem} % работа со списками
+
+%% Импорт csv таблиц
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{pgf}
+\usepackage{pgfplotstable}
+\pgfplotstableset{col sep=comma, search path=./processor_output}
+\pgfkeys{/pgf/number format/1000 sep={}}
+\newcolumntype{g}{>{\columncolor[gray]{.8}}c}
+
+% проверяет наличие аргумента в подстроке
+\usepackage{xstring}
+\newcommand\ifin[2]{\IfSubStr{,#2,}{,#1,}}
+
+\newcommand*{\nth}[2]{%
+  \foreach \x [count=\k] in #1{%
+        \ifnum\k=#2{%
+          \x
+        }\fi%
+    }
+}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\newcommand\thpar[3]{\left(\frac{\partial #1}{\partial #2}\right)_{#3}}
+\newcommand\mujt{\mu_{\text{ДТ}}}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		{\large МОСКОВСКИЙ ФИЗИКО-ТЕХНИЧЕСКИЙ ИНСТИТУТ (НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ УНИВЕРСИТЕТ)}
+	\end{center}
+	\begin{center}
+		{\large Физтех-школа прикладной математики и информатики}
+	\end{center}
+
+
+	\vspace{4.5cm}
+	{\huge
+		\begin{center}
+			{\bf Отчёт о выполнении лабораторной работы 2.2.5}\\
+      Определение вязкости жидкости по скорости истечения через капилляр
+		\end{center}
+	}
+	\vspace{2cm}
+	\begin{flushright}
+		{\LARGE Выполнил:\\ Вронский Александр Сергеевич \\
+			\vspace{0.2cm}
+			Б05-226}
+	\end{flushright}
+	\vspace{8cm}
+	\begin{center}
+		Долгопрудный\\
+		\today
+	\end{center}
+\end{titlepage}
+
+\textbf{Цель работы:} 1) определение вязкости воды по измерению объёма жидкости, протекшей через капилляр; 2) определение вязкости других жидкостей путём сравнения скорости их перетекания со скоростью перетекания воды.
+
+\textbf{В работе используются:} сосуд Мариотта; капиллярная трубка, мензурка; секундомер; стакан; микроскоп на стойке;
+
+\section{Теоретические сведения}
+
+\end{document}
